@@ -1,6 +1,4 @@
-///////////////////////////////
 // DEPENDENCIES
-////////////////////////////////
 // get .env variables
 require("dotenv").config()
 // pull PORT from .env, give default value of 3001
@@ -16,9 +14,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const morgan = require("morgan")
 
-///////////////////////////////
 // DATABASE CONNECTION
-////////////////////////////////
 // Establish Connection
 mongoose.connect(DATABASE_URL)
 // Connection Events
@@ -27,19 +23,17 @@ mongoose.connection
   .on("close", () => console.log("You are disconnected from MongoDB"))
   .on("error", (error) => console.log(error))
 
-///////////////////////////////
 // MODELS
-////////////////////////////////
 const ReviewsSchema = new mongoose.Schema({
   name: String,
-  review: String,
+  rating: String,
   description: String,
 })
 
 const Review = mongoose.model("Review", ReviewsSchema)
 
 ///////////////////////////////
-// MiddleWare
+// Middleware
 ////////////////////////////////
 app.use(cors()) // to prevent cors errors, open access to all origins
 app.use(morgan("dev")) // logging
@@ -56,7 +50,7 @@ app.get("/", (req, res) => {
 // INDEX ROUTE
 app.get("/reviews", async (req, res) => {
   try {
-    // send all people
+    // send all reviews
     res.json(await Review.find({}))
   } catch (error) {
     //send error
@@ -75,7 +69,29 @@ app.post("/reviews", async (req, res) => {
   }
 })
 
-///////////////////////////////
+// DELETE ROUTE
+app.delete("/reviews/:id", async (req, res) => {
+  try {
+    // send all reviews
+    res.json(await Review.findByIdAndDelete(req.params.id))
+  } catch (error) {
+    //send error
+    res.status(400).json(error)
+  }
+})
+
+// UPDATE ROUTE
+app.put("/reviews/:id", async (req, res) => {
+  try {
+    // send all reviews
+    res.json(
+      await Review.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    )
+  } catch (error) {
+    //send error
+    res.status(400).json(error)
+  }
+})
+
 // LISTENER
-////////////////////////////////
 app.listen(PORT, () => console.log(`listening on PORT ${PORT}`))
