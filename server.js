@@ -30,7 +30,7 @@ const ReviewsSchema = new mongoose.Schema({
   description: String,
 })
 
-const Review = mongoose.model("Review", ReviewsSchema)
+const Reviews = mongoose.model("Review", ReviewsSchema)
 
 ///////////////////////////////
 // Middleware
@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 app.get("/reviews", async (req, res) => {
   try {
     // send all reviews
-    res.json(await Review.find({}))
+    res.json(await Reviews.find({}))
   } catch (error) {
     //send error
     res.status(400).json(error)
@@ -62,7 +62,7 @@ app.get("/reviews", async (req, res) => {
 app.post("/reviews", async (req, res) => {
   try {
     // send all reviews
-    res.json(await Review.create(req.body))
+    res.json(await Reviews.create(req.body))
   } catch (error) {
     //send error
     res.status(400).json(error)
@@ -73,7 +73,7 @@ app.post("/reviews", async (req, res) => {
 app.delete("/reviews/:id", async (req, res) => {
   try {
     // send all reviews
-    res.json(await Review.findByIdAndDelete(req.params.id))
+    res.json(await Reviews.findByIdAndDelete(req.params.id))
   } catch (error) {
     //send error
     res.status(400).json(error)
@@ -85,7 +85,7 @@ app.put("/reviews/:id", async (req, res) => {
   try {
     // send all reviews
     res.json(
-      await Review.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      await Reviews.findByIdAndUpdate(req.params.id, req.body, { new: true })
     )
   } catch (error) {
     //send error
